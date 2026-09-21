@@ -92,9 +92,13 @@ export const GameScene=
         ctx.fillRect(0,0,width,height);
         
         // # perspective setting
-        const horizonY=height*0.9;
-        const fov=300;
+        const horizonY=height*0.3;
+        const fov=height*0.75;
         // scale = \frac{fov}{fov+relZ*60}
+
+        const maxTrackWidth=width*0.7;
+        const baseColWidth=maxTrackWidth/this.cols;
+        const rowHeightStep=height*0.15;
 
         // # draw tiles
         // oh wait isnt that painter's algorithm
@@ -106,19 +110,27 @@ export const GameScene=
         {
             for(let c=0;c<this.cols;c++) // c++
             {
-                // ignore behind body
-                const relZ=(r-cameraZ)-4;
-                if(relZ<=0.1)continue;
-
-                const scale=fov/(fov+relZ*60);
-
-                // 3d(c,r)->2d(tileCenterX,tileY)
-                const tileCenterX=width/2+(c-(this.cols-1)/2)*80*scale;
-                const tileY=horizonY+(relZ*-30)*scale;
-                const renderTileWidth=75*scale;
-                const renderTileHeight=35*scale;
-
                 const tileType=this.map[r][c];
+                if(tileType===0)continue;
+
+                const zNear=(r-cameraZ)+1;
+                const zFar=zNear+1;
+                // ignore behind body
+                if(zNear<=0.1)continue;
+/*
+scale = fov / fov+z*40
+*/
+                const scaleNear=fov/(fov+zNear*40);
+                const scaleFar=fov/(fov+zFar*40);
+
+                // ?
+                const yNear=height-(zNear*rowHeightStep)*scaleNear;
+                const centerXNear=width/2+(c-(this.cols-1)/2)*baseColWidth*scaleNear;
+                const halfWidthNear=(baseColWidth*0.95/2)*scaleNear;
+                const yFar=height-(zFar*rowHeightStep)*scaleFar;
+                const centerXFar=width/2+(c-(this.cols-1)/2)*baseColWidth*scaleFar;
+                const halfWidthFar=(baseColWidth*0.95/2)*scaleFar;
+
                 switch (tileType)
                 {
                     case 0:
@@ -138,19 +150,36 @@ export const GameScene=
                     }
                 }
 
-                ctx.fillRect(
-                    tileCenterX-renderTileWidth/2,
-                    tileY,
-                    renderTileWidth,
-                    renderTileHeight
-                );
+                // trapezium
+/*
+                
+                     1_______________2
+                     /               \   
+                    /                 \  
+                   /                   \ 
+                  /                     \
+                 /                       \
+                /_________________________\
+               4                           3
+
+*/
+                ctx.beginPath();
+                ctx.moveTo(centerXFar-halfWidthFar, yFar);
+                ctx.lineTo(centerXFar+halfWidthFar, yFar);
+                ctx.lineTo(centerXNear+halfWidthNear, yNear);
+                ctx.lineTo(centerXNear-halfWidthNear, yNear);
+                ctx.closePath();
+                ctx.fill();
+
             }
         }
 
         // # ball
-        const ballScreenX=width/2+(this.ball.x-(this.cols-1)/2)*80*0.83;
-        const ballScreenY=horizonY+(1.5*40)*0.83-15;
-        const ballRadius=16;
+        const ballZ=1;
+        const ballScale=fov/(fov+ballZ*40);
+        const ballScreenX=width/2+(this.ball.x-(this.cols-1)/2)*baseColWidth*ballScale;
+        const ballScreenY=height-(ballZ*rowHeightStep)*ballScale;
+        const ballRadius=baseColWidth/2*0.6;
 
         ctx.beginPath();
         ctx.ellipse(ballScreenX,ballScreenY,ballRadius,ballRadius,0,0,Math.PI*2);
