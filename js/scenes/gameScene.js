@@ -4,7 +4,7 @@ export const GameScene=
     map:[],
     speedZ:0.15,
     cols:5,
-    ball:{x:0,z:0},
+    ball:{x:0,y:0,z:0}, // y:height
     canvas:null,
     handlePointerMove:null,
 
@@ -13,7 +13,7 @@ export const GameScene=
         this.map=levelData.map;
         this.speedZ=levelData.speedZ;
         this.cols=levelData.cols;
-        this.ball={x:(levelData.cols-1)/2,z:0};
+        this.ball={x:(levelData.cols-1)/2,y:0,z:0};
         this.canvas=canvas;
 
         this.bindInput();
@@ -28,6 +28,7 @@ export const GameScene=
             const rect=this.canvas.getBoundingClientRect();
             
             const clientX=e.touches?e.touches[0].clientX:e.clientX;
+            const clientY=e.touches?e.touches[0].clientY:e.clientY;
             const pointerXRatio=(clientX-rect.left)/rect.width;
 
             this.ball.x=Math.max(0,(Math.min((pointerXRatio*(this.cols-1)),(this.cols-1))));
@@ -177,14 +178,28 @@ scale = fov / fov+z*40
         // # ball
         const ballZ=1;
         const ballScale=fov/(fov+ballZ*40);
-        const ballScreenX=width/2+(this.ball.x-(this.cols-1)/2)*baseColWidth*ballScale;
-        const ballScreenY=height-(ballZ*rowHeightStep)*ballScale;
+
+        const shadowScreenX=width/2+(this.ball.x-(this.cols-1)/2)*baseColWidth*ballScale;
+        const shadowScreenY=height-(ballZ*rowHeightStep)*ballScale;
         const ballRadius=baseColWidth/2*0.6;
 
+        const jumpHeight=(this.ball?.y||0)*baseColWidth;
+        const shadowScale=Math.min(1,1+jumpHeight/150);
+        const shadowAlpha=Math.max(0.1,0.5-jumpHeight/200);
+
         ctx.beginPath();
-        ctx.ellipse(ballScreenX,ballScreenY,ballRadius,ballRadius,0,0,Math.PI*2);
-        ctx.fillStyle="#00000050";
+        ctx.ellipse(
+            shadowScreenX,
+            shadowScreenY,
+            ballRadius*shadowScale,
+            ballRadius*shadowScale*0.4,
+            0,0,Math.PI*2);
+        ctx.fillStyle=`rgba(0,0,0,${shadowAlpha})`;
         ctx.fill();
+
+
+        const ballScreenX=shadowScreenX;
+        const ballScreenY=shadowScreenY-jumpHeight-ballRadius*0.5;
 
         ctx.beginPath();
         ctx.arc(ballScreenX,ballScreenY-20,ballRadius,0,Math.PI*2);
