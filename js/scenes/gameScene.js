@@ -208,7 +208,9 @@ scale = fov / fov+z*40
         
         ctx.strokeStyle='#ffffff';
         ctx.lineWidth=2;
-        ctx.stroke();        
+        ctx.stroke();  
+        
+        console.log("GameScene");
     },
 
     onGameOver(isSuccess)
