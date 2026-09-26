@@ -3,6 +3,7 @@ import {GameScene} from './scenes/gameScene.js';
 import {MenuScene} from './scenes/menuScene.js';
 import {HomeScene} from './scenes/homeScene.js';
 import {Levels} from './levels.js';
+import {Router} from './router.js';
 
 /** @type {HTMLCanvasElement} */
 const canvas=document.getElementById('main-canvas');
@@ -21,6 +22,31 @@ else
     currentScene=HomeScene;
     currentScene.init(canvas);   
 }
+
+Router.init((route,levelId)=>
+{
+    if(currentScene&&currentScene.destroy)
+    {
+        currentScene.destroy();
+    }
+
+    if(route==='home')
+    {
+        currentScene=HomeScene;
+        currentScene.init(canvas);
+    }
+    else if(route==='menu')
+    {
+        currentScene=MenuScene;
+        currentScene.init(canvas);
+    }
+    else if(route==='game')
+    {
+        currentScene=GameScene;
+        const levelData=Levels[levelId]||Levels["1"];
+        currentScene.init(levelData,canvas);
+    }
+})
 
 function gameLoop()
 {

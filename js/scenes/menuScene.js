@@ -19,6 +19,15 @@ export const MenuScene=
     buttons:
     [
         {
+            id:'back-home',
+            text:'<home',
+            xRatio:0.04,
+            yRatio:0.04,
+            widthRatio:0.20,
+            heightRatio:0.20,
+            onClick:()=>Router.go('#home')
+        },
+        {
             id:'start-level-1',
             text:'1',
             xRatio:0.04,
