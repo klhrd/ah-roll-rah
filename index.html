@@ -13,10 +13,14 @@
                 display: flex;
                 justify-content: center;
                 align-items: center;
+
                 min-height: 100svh;
+                min-width: 100svw;
                 margin: 0;
                 padding: 0;
                 background-color: #000000;
+
+                overflow: auto;
             
                 font-family: 'Press Start 2P', 'DotGothic16', sans-serif;
             }
@@ -24,12 +28,20 @@
             canvas
             {
                 background-color: #FFFFFF;
+
+                aspect-ratio: 4/3;
+
+                width: min(100svw, (100svh*4/3));
+                height: min(100svh, (100svw*3/4));
+
+                max-width: 1200px;
+                max-height: 900px;
             }
         </style>
 
     </head>
     <body>
-        <canvas id="main-canvas" height="405" width="720"></canvas>
+        <canvas id="main-canvas" height="600" width="800"></canvas>
         <script type="module" src="js/app.js"></script>
     </body>
 </html>
