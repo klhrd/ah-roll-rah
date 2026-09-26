@@ -6,15 +6,15 @@ export const Router=
     {
         const handleHashChange=()=>
         {
-            const hash=window.location.hash||'menu';
+            const hash=window.location.hash||'home';
 
-            if(hash==='#menu')
+            if(hash==='#home')
+            {
+                onRouteChange('home');
+            }
+            else if(hash==='#menu')
             {
                 onRouteChange('menu');
-            }
-            else if(hash==='#levels')
-            {
-                onRouteChange('levels');
             }
             else if(hash.startsWith('#level-'))
             {

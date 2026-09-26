@@ -1,5 +1,7 @@
 // js/scenes/menuScenes.js
 
+import { Router } from "../router.js";
+
 /*
 
 width
@@ -143,7 +145,7 @@ export const MenuScene=
             const rect=this.canvas.getBoundingClientRect();
 
             const clickX=e.clientX-rect.left;
-            const clickY=e.clientY-rect.right;
+            const clickY=e.clientY-rect.top;
 
             for(const btn of this.renderedBtns)
             {

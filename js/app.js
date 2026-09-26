@@ -1,6 +1,7 @@
 // js/app.js
 import {GameScene} from './scenes/gameScene.js';
 import {MenuScene} from './scenes/menuScene.js';
+import {HomeScene} from './scenes/homeScene.js';
 import {Levels} from './levels.js';
 
 /** @type {HTMLCanvasElement} */
@@ -17,7 +18,7 @@ if (DEV_MODE)
 }
 else
 {
-    currentScene=MenuScene;
+    currentScene=HomeScene;
     currentScene.init(canvas);   
 }
 
