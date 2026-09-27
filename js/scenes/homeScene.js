@@ -1,7 +1,7 @@
 // js/scenes/homeScenes.js
 
 import { Router } from "../router.js";
-
+import { CONFIG } from "../config.js";
 /*
 
 */
@@ -104,7 +104,7 @@ export const HomeScene=
         ctx.font='16px "Press Start 2P"';
         ctx.textAlign="center";
         ctx.textBaseline='middle';
-        ctx.fillText("PRESS PLAY TO START",width*0.5,height*0.7);
+        ctx.fillText(`${CONFIG.versionText} | PRESS PLAY TO START`,width*0.5,height*0.9);
     },
 
     destroy()
