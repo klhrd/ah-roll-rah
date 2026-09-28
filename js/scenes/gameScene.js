@@ -1,4 +1,6 @@
 // scenes/gameScene.js
+import { LevelManager } from "../levelManager.js";
+
 export const GameScene=
 {
     map:[],
@@ -7,13 +9,26 @@ export const GameScene=
     ball:{x:0,y:0,z:0}, // y:height
     canvas:null,
     handlePointerMove:null,
+    levelData:null,
+    isLoaded:false,
 
-    init(levelData,canvas)
+    async init(levelId,canvas)
     {
-        this.map=levelData.map;
-        this.speedZ=levelData.speedZ;
-        this.cols=levelData.cols;
-        this.ball={x:(levelData.cols-1)/2,y:0,z:0};
+        this.canvas=canvas;
+        this.isLoaded=false;
+
+        this.levelData=await LevelManager.getLevel(levelId);
+
+        if(this.levelData)
+        {
+            this.isLoaded=true;
+            console.log(`succeeded to load ${levelId}, levelData: `,this.levelData);
+        }
+
+        this.map=this.levelData.map;
+        this.speedZ=this.levelData.speedZ;
+        this.cols=this.levelData.cols;
+        this.ball={x:(this.levelData.cols-1)/2,y:0,z:0};
         this.canvas=canvas;
 
         this.bindInput();
@@ -39,6 +54,8 @@ export const GameScene=
 
     update()
     {
+        if(!this.isLoaded)return;
+
         this.ball.z+=this.speedZ;
 
         const row=Math.floor(this.ball.z);
@@ -88,6 +105,17 @@ export const GameScene=
         const width=this.canvas.width;
         const height=this.canvas.height;
         
+        // # loading
+        if(!this.isLoaded)
+        {
+            ctx.fillStyle='#1a1a2e'; // bg color
+            ctx.fillRect(0,0,width,height);
+            ctx.fillStyle="#e0e0ff";
+            ctx.font='bold 40px "Press Start 2P", monospace';
+            ctx.textAlign="center";
+            ctx.fillText('LOADING...',width*0.5,height*0.5);
+        }
+
         // # clean all
         ctx.fillStyle='#1a1a2e'; // bg color
         ctx.fillRect(0,0,width,height);

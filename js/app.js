@@ -2,7 +2,7 @@
 import {GameScene} from './scenes/gameScene.js';
 import {MenuScene} from './scenes/menuScene.js';
 import {HomeScene} from './scenes/homeScene.js';
-import {Levels} from './levels.js';
+import {LevelManager} from './levelManager.js';
 import {Router} from './router.js';
 
 /** @type {HTMLCanvasElement} */
@@ -15,7 +15,7 @@ const DEV_MODE=false;
 if (DEV_MODE)
 {
     currentScene=GameScene;
-    currentScene.init(Levels["1"],canvas);
+    currentScene.init("1",canvas);
 }
 else
 {
@@ -43,8 +43,7 @@ Router.init((route,levelId)=>
     else if(route==='game')
     {
         currentScene=GameScene;
-        const levelData=Levels[levelId]||Levels["1"];
-        currentScene.init(levelData,canvas);
+        currentScene.init(levelId,canvas);
     }
 })
 
