@@ -2,7 +2,7 @@
 
 export const CONFIG=
 {
-    GAME_NAME:'AH-ROLL-AH',
+    GAME_NAME:'AH-ROLL-RAH',
     VERSION:'1.0.0',
     AUTHOR:'@klhrd',
 

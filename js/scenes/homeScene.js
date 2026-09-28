@@ -73,7 +73,7 @@ export const HomeScene=
         ctx.font='bold 60px "Press Start 2P", monospace';
         ctx.textAlign="center";
         ctx.textBaseline="middle";
-        ctx.fillText('AH-ROLL-AH',width*0.5,height*0.2);
+        ctx.fillText('AH-ROLL-RAH',width*0.5,height*0.2);
         
         // render btns
         this.buttons.forEach((btn)=>

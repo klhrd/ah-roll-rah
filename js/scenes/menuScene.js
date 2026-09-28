@@ -188,7 +188,7 @@ export const MenuScene=
         ctx.fillStyle="#e0e0ff";
         ctx.font='bold 40px "Press Start 2P", monospace';
         ctx.textAlign="center";
-        ctx.fillText('AH-ROLL-AH',width/2,height*0.14);
+        ctx.fillText('AH-ROLL-RAH',width/2,height*0.14);
 
         // render btns
         this.buttons.forEach((btn)=>
