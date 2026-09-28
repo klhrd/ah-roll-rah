@@ -52,7 +52,7 @@ export const ResultScene=
             showIfWin:null,
             onClick:()=>
             {
-                Router.go(`#level-${String(Number(ResultScene.levelId))}`);
+                Router.go(`#menu`);
             }
         },
         {
@@ -66,8 +66,8 @@ export const ResultScene=
             showIfWin:false,
             onClick:()=>
             {
-                Router.go('#home');
-                console.log("?")
+                console.log("?");
+                Router.go(`#home`);
             }
 
         },
@@ -99,6 +99,7 @@ export const ResultScene=
             {
                 if(clickX>=btn.x&&clickX<=btn.x+btn.w&&clickY>=btn.y&&clickY<=btn.y+btn.h)
                 {
+                    console.log(btn,btn.onClick,"click");
                     btn.onClick();
                     break;
                 }
