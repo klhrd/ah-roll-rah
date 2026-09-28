@@ -21,6 +21,14 @@ export const Router=
                 const levelId=hash.replace('#level-','');
                 onRouteChange('game',levelId);
             }
+            else if(hash.startsWith('#result-'))
+            {
+                // ex: #result-1-win
+                const parts=hash.replace('#result-','').split('-');
+                const levelId=parts[0];
+                const isWin=parts[1]==='win';
+                onRouteChange('result',levelId,isWin);
+            }
             
         };
 

@@ -2,6 +2,7 @@
 import {GameScene} from './scenes/gameScene.js';
 import {MenuScene} from './scenes/menuScene.js';
 import {HomeScene} from './scenes/homeScene.js';
+import {ResultScene} from './scenes/resultScene.js';
 import {LevelManager} from './levelManager.js';
 import {Router} from './router.js';
 
@@ -14,8 +15,8 @@ let currentScene=null;
 const DEV_MODE=false;
 if (DEV_MODE)
 {
-    currentScene=GameScene;
-    currentScene.init("1",canvas);
+    currentScene=ResultScene;
+    currentScene.init("1",true,canvas);
 }
 else
 {
@@ -23,7 +24,7 @@ else
     currentScene.init(canvas);   
 }
 
-Router.init((route,levelId)=>
+Router.init((route,levelId,isWin)=>
 {
     if(currentScene&&currentScene.destroy)
     {
@@ -44,6 +45,11 @@ Router.init((route,levelId)=>
     {
         currentScene=GameScene;
         currentScene.init(levelId,canvas);
+    }
+    else if(route==='result')
+    {
+        currentScene=ResultScene;
+        currentScene.init(levelId,isWin,canvas);
     }
 })
 

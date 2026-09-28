@@ -1,5 +1,6 @@
 // scenes/gameScene.js
 import { LevelManager } from "../levelManager.js";
+import { Router } from "../router.js";
 
 export const GameScene=
 {
@@ -9,8 +10,10 @@ export const GameScene=
     ball:{x:0,y:0,z:0}, // y:height
     canvas:null,
     handlePointerMove:null,
+
     levelData:null,
     isLoaded:false,
+
 
     async init(levelId,canvas)
     {
@@ -74,6 +77,8 @@ export const GameScene=
             this.onGameOver(true);
             return;
         }
+
+
 
         const tileType=this.map[row][col];
         switch (tileType)
@@ -245,11 +250,13 @@ scale = fov / fov+z*40
     {
         if(isSuccess)
         {
-            //alert("Success!");
+            Router.go(`#result-${this.levelData.id}-win`);
+            console.log(`go #result-${this.levelData.id}-win`)
         }
         else
         {
-            //alert("Fail!");
+            Router.go(`#result-${this.levelData.id}-fail`);
+            console.log(`go #result-${this.levelData.id}-fail`);
         }
     }
     // route go menu

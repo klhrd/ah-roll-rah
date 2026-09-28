@@ -1,4 +1,4 @@
-// js/scenes/homeScenes.js
+// js/scenes/homeScene.js
 
 import { Router } from "../router.js";
 import { CONFIG } from "../config.js";
