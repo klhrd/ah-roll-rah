@@ -59,6 +59,22 @@ function gameLoop()
     {
         if(currentScene.update)currentScene.update();
         if(currentScene.draw)currentScene.draw(ctx);
+
+        
+        const logPointerXY=(e)=>
+        {
+            const rect=canvas.getBoundingClientRect();
+
+            const clientX=e.touches?e.touches[0].clientX:e.clientX;
+            const clientY=e.touches?e.touches[0].clientY:e.clientY;
+            
+            const pointerXRatio=(clientX-rect.left)/rect.width;
+            const pointerYRatio=(clientY-rect.top)/rect.height;
+
+            console.log(`pointerXY: \n(${pointerXRatio},${pointerYRatio})`);
+        };
+        //window.addEventListener('pointermove',logPointerXY);
+
     }
     
 
