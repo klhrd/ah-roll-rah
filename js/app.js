@@ -9,6 +9,8 @@ import {Router} from './router.js';
 /** @type {HTMLCanvasElement} */
 const canvas=document.getElementById('main-canvas');
 const ctx=canvas.getContext('2d');
+let width=canvas.width;
+let height=canvas.height;
 
 let currentScene=null;
 
@@ -53,31 +55,49 @@ Router.init((route,levelId,isWin)=>
     }
 })
 
-function gameLoop()
+
+let clientX=0;
+let clientY=0;
+let pointerXRatio=0;
+let pointerYRatio=0;
+
+const logPointerXY=(e)=>
 {
+    const rect=canvas.getBoundingClientRect();
+
+    clientX=e.touches?e.touches[0].clientX:e.clientX;
+    clientY=e.touches?e.touches[0].clientY:e.clientY;
+    pointerXRatio=(clientX-rect.left)/rect.width;
+    pointerYRatio=(clientY-rect.top)/rect.height;
+};
+window.addEventListener('pointermove',logPointerXY);
+
+function resizeCanvas()
+{
+    canvas.width=canvas.clientWidth;
+    canvas.height=canvas.clientHeight;
+
+    width=canvas.width;
+    height=canvas.height;
     if(currentScene)
     {
         if(currentScene.update)currentScene.update();
         if(currentScene.draw)currentScene.draw(ctx);
+    }    
+}
+window.addEventListener('resize',resizeCanvas);
 
-        
-        const logPointerXY=(e)=>
-        {
-            const rect=canvas.getBoundingClientRect();
+resizeCanvas();
+function gameLoop()
+{
+    if(currentScene)
+    {
 
-            const clientX=e.touches?e.touches[0].clientX:e.clientX;
-            const clientY=e.touches?e.touches[0].clientY:e.clientY;
-            
-            const pointerXRatio=(clientX-rect.left)/rect.width;
-            const pointerYRatio=(clientY-rect.top)/rect.height;
+        if(currentScene.update)currentScene.update();
+        if(currentScene.draw)currentScene.draw(ctx);
 
-            console.log(`pointerXY: \n(${pointerXRatio},${pointerYRatio})`);
-        };
-        //window.addEventListener('pointermove',logPointerXY);
-
+        console.log(`WH: (${width},${height})\npointerXYRatio: \n(${pointerXRatio},${pointerYRatio})\npointerXY: \n(${pointerXRatio*width},${pointerYRatio*height})`);
     }
-    
-
     requestAnimationFrame(gameLoop);
 }
 
