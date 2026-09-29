@@ -152,7 +152,7 @@ export const ResultScene=
             ctx.fillRect(x,y,w,h);
 
             ctx.strokeStyle='#dddddd';
-            ctx.lineWidth=5;
+            ctx.lineWidth=5*btn.textSizeRatio;
             ctx.strokeRect(x+10,y+10,w-20,h-20);
 
             ctx.fillStyle='#eeeeee';

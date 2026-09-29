@@ -20,16 +20,18 @@ export const MenuScene=
     [
         {
             id:'back-home',
-            text:'<home',
+            text:' <',
+            textSizeRatio:0.8,
             xRatio:0.04,
             yRatio:0.04,
-            widthRatio:0.20,
-            heightRatio:0.20,
+            widthRatio:0.10,
+            heightRatio:0.1,
             onClick:()=>Router.go('#home')
         },
         {
             id:'start-level-1',
             text:'1',
+            textSizeRatio:1,
             xRatio:0.04,
             yRatio:0.28,
             widthRatio:0.20,
@@ -39,6 +41,7 @@ export const MenuScene=
         {
             id:'start-level-2',
             text:'2',
+            textSizeRatio:1,
             xRatio:0.28,
             yRatio:0.28,
             widthRatio:0.20,
@@ -48,6 +51,7 @@ export const MenuScene=
         {
             id:'start-level-3',
             text:'3',
+            textSizeRatio:1,
             xRatio:0.52,
             yRatio:0.28,
             widthRatio:0.20,
@@ -57,6 +61,7 @@ export const MenuScene=
         {
             id:'start-level-4',
             text:'4',
+            textSizeRatio:1,
             xRatio:0.76,
             yRatio:0.28,
             widthRatio:0.20,
@@ -67,6 +72,7 @@ export const MenuScene=
         {
             id:'start-level-5',
             text:'5',
+            textSizeRatio:1,
             xRatio:0.04,
             yRatio:0.52,
             widthRatio:0.20,
@@ -76,6 +82,7 @@ export const MenuScene=
         {
             id:'start-level-6',
             text:'6',
+            textSizeRatio:1,
             xRatio:0.28,
             yRatio:0.52,
             widthRatio:0.20,
@@ -85,6 +92,7 @@ export const MenuScene=
         {
             id:'start-level-7',
             text:'7',
+            textSizeRatio:1,
             xRatio:0.52,
             yRatio:0.52,
             widthRatio:0.20,
@@ -94,6 +102,7 @@ export const MenuScene=
         {
             id:'start-level-8',
             text:'8',
+            textSizeRatio:1,
             xRatio:0.76,
             yRatio:0.52,
             widthRatio:0.20,
@@ -104,6 +113,7 @@ export const MenuScene=
         {
             id:'start-level-9',
             text:'9',
+            textSizeRatio:1,
             xRatio:0.04,
             yRatio:0.76,
             widthRatio:0.20,
@@ -113,6 +123,7 @@ export const MenuScene=
         {
             id:'start-level-A',
             text:'A',
+            textSizeRatio:1,
             xRatio:0.28,
             yRatio:0.76,
             widthRatio:0.20,
@@ -122,6 +133,7 @@ export const MenuScene=
         {
             id:'start-level-B',
             text:'B',
+            textSizeRatio:1,
             xRatio:0.52,
             yRatio:0.76,
             widthRatio:0.20,
@@ -131,6 +143,7 @@ export const MenuScene=
         {
             id:'start-level-C',
             text:'C',
+            textSizeRatio:1,
             xRatio:0.76,
             yRatio:0.76,
             widthRatio:0.20,
@@ -204,11 +217,11 @@ export const MenuScene=
             ctx.fillRect(x,y,w,h);
 
             ctx.strokeStyle='#dddddd';
-            ctx.lineWidth=5;
+            ctx.lineWidth=5*btn.textSizeRatio;
             ctx.strokeRect(x+10,y+10,w-20,h-20);
 
             ctx.fillStyle='#eeeeee';
-            ctx.font='32px "Press Start 2P"';
+            ctx.font=`${32*btn?.textSizeRatio??1}px "Press Start 2P"`;
             ctx.textBaseline='middle';
             ctx.fillText(btn.text,x+w/2-w*0.2,y+h/2);
         });
