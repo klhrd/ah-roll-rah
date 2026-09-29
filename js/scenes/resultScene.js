@@ -118,6 +118,7 @@ export const ResultScene=
     {
         const width=this.canvas.width;
         const height=this.canvas.height;
+        
         this.renderedBtns=[];
         ctx.imageSmoothingEnabled = false;
 
@@ -126,14 +127,14 @@ export const ResultScene=
 
         // title
         ctx.fillStyle=this.isWin?"#e0e0ff":"#ffe0e0";
-        ctx.font='bold 60px "Press Start 2P", monospace';
+        ctx.font=`bold ${60*width/800}px "Press Start 2P", monospace`;
         ctx.textAlign="center";
         ctx.textBaseline="middle";
         ctx.fillText(this.isWin?"CLEAR!":"GAMEOVER",width*0.5,height*0.2);
         
         // info
         ctx.fillStyle='#cccccc';
-        ctx.font='16px "Press Start 2P"';
+        ctx.font=`${16*width/800}px "Press Start 2P"`;
         ctx.textAlign="center";
         ctx.textBaseline='middle';
         ctx.fillText(`Level ${this.levelId}`,width*0.25,height*0.40);
@@ -152,11 +153,11 @@ export const ResultScene=
             ctx.fillRect(x,y,w,h);
 
             ctx.strokeStyle='#dddddd';
-            ctx.lineWidth=5*btn.textSizeRatio;
+            ctx.lineWidth=5*width/800*btn.textSizeRatio;
             ctx.strokeRect(x+10,y+10,w-20,h-20);
 
             ctx.fillStyle='#eeeeee';
-            ctx.font=`${32*btn.textSizeRatio}px "Press Start 2P"`;
+            ctx.font=`${32*width/800*btn.textSizeRatio}px "Press Start 2P"`;
             ctx.textAlign="center";
             ctx.textBaseline='middle';
             ctx.fillText(btn.text,x+w/2,y+h/2);

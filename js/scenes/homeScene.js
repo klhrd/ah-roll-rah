@@ -70,7 +70,7 @@ export const HomeScene=
 
         // title
         ctx.fillStyle="#e0e0ff";
-        ctx.font='bold 60px "Press Start 2P", monospace';
+        ctx.font=`bold ${60*width/800}px "Press Start 2P", monospace`;
         ctx.textAlign="center";
         ctx.textBaseline="middle";
         ctx.fillText('AH-ROLL-RAH',width*0.5,height*0.2);
@@ -89,11 +89,11 @@ export const HomeScene=
             ctx.fillRect(x,y,w,h);
 
             ctx.strokeStyle='#dddddd';
-            ctx.lineWidth=5;
+            ctx.lineWidth=5*width/800;
             ctx.strokeRect(x+10,y+10,w-20,h-20);
 
             ctx.fillStyle='#eeeeee';
-            ctx.font='32px "Press Start 2P"';
+            ctx.font=`${32*width/800}px "Press Start 2P"`;
             ctx.textAlign="center";
             ctx.textBaseline='middle';
             ctx.fillText(btn.text,x+w/2,y+h/2);
@@ -101,7 +101,7 @@ export const HomeScene=
 
         // info
         ctx.fillStyle='#aaaaaa';
-        ctx.font='16px "Press Start 2P"';
+        ctx.font=`${16*width/800}px "Press Start 2P"`;
         ctx.textAlign="center";
         ctx.textBaseline='middle';
         ctx.fillText(`${CONFIG.versionText} | PRESS PLAY TO START`,width*0.5,height*0.9);

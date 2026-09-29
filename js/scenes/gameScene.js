@@ -169,7 +169,7 @@ export const GameScene=
             ctx.fillStyle='#1a1a2e'; // bg color
             ctx.fillRect(0,0,width,height);
             ctx.fillStyle="#e0e0ff";
-            ctx.font='bold 40px "Press Start 2P", monospace';
+            ctx.font=`bold ${40*width/800}px "Press Start 2P", monospace`;
             ctx.textAlign="center";
             ctx.fillText('LOADING...',width*0.5,height*0.5);
         }
@@ -323,7 +323,7 @@ scale = fov / fov+z*40
             ctx.fill();
             
             ctx.strokeStyle='#ffffff';
-            ctx.lineWidth=2;
+            ctx.lineWidth=2*width/800;
             ctx.stroke();  
         }
         

@@ -199,7 +199,7 @@ export const MenuScene=
 
         // title
         ctx.fillStyle="#e0e0ff";
-        ctx.font='bold 40px "Press Start 2P", monospace';
+        ctx.font=`bold ${40*width/800}px "Press Start 2P", monospace`;
         ctx.textAlign="center";
         ctx.fillText('AH-ROLL-RAH',width/2,height*0.14);
 
@@ -217,11 +217,11 @@ export const MenuScene=
             ctx.fillRect(x,y,w,h);
 
             ctx.strokeStyle='#dddddd';
-            ctx.lineWidth=5*btn.textSizeRatio;
+            ctx.lineWidth=5*width/800*btn.textSizeRatio;
             ctx.strokeRect(x+10,y+10,w-20,h-20);
 
             ctx.fillStyle='#eeeeee';
-            ctx.font=`${32*btn?.textSizeRatio??1}px "Press Start 2P"`;
+            ctx.font=`${32*width/800*btn?.textSizeRatio??1}px "Press Start 2P"`;
             ctx.textBaseline='middle';
             ctx.fillText(btn.text,x+w/2-w*0.2,y+h/2);
         });
