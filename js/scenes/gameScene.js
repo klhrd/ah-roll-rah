@@ -51,19 +51,27 @@ export const GameScene=
             window.removeEventListener('pointermove',this.handlePointerMove);
         }
 
-        const handlePointerMove=(e)=>
+        this.handlePointerMove=(e)=>
         {
             if(this.state!=="playing")return;
 
             const rect=this.canvas.getBoundingClientRect();
-            
             const clientX=e.touches?e.touches[0].clientX:e.clientX;
-            const pointerXRatio=(clientX-rect.left)/rect.width;
+            
+            const canvasX=clientX-rect.left;
+            const width=rect.width;
 
-            this.ball.x=Math.max(0,(Math.min((pointerXRatio*(this.cols-1)),(this.cols-1))));
+            // =draw()
+            const maxTrackWidth=width*0.7;
+            const baseColWidth=maxTrackWidth/this.cols;
+
+            const trackLeftX=(width/2)-(maxTrackWidth/2);
+            const colZeroCenterX=trackLeftX+(baseColWidth/2);
+           
+            this.ball.x=(canvasX-colZeroCenterX)/baseColWidth;
         };
 
-        window.addEventListener('pointermove',handlePointerMove);
+        window.addEventListener('pointermove',this.handlePointerMove);
     },
 
     update()
@@ -103,7 +111,7 @@ export const GameScene=
         const col=Math.round(this.ball.x);
 
         // 左右超出
-        if(col<0||col>this.map[0].length)
+        if(col<0||col>=this.cols)
         {
             this.startFall();
             return;
@@ -299,17 +307,18 @@ scale = fov / fov+z*40
 
         if(this.state!=="falling"||this.animTimer<0.8)
         {
-            if(shadowScale<=0)return;
-
-            ctx.beginPath();
-            ctx.ellipse(
-                shadowScreenX,
-                shadowScreenY,
-                baseBallRadius*shadowScale,
-                baseBallRadius*shadowScale*0.4,
-                0,0,Math.PI*2);
-            ctx.fillStyle=`rgba(0,0,0,${shadowAlpha})`;
-            ctx.fill();
+            if(shadowScale>0)
+            {
+                ctx.beginPath();
+                ctx.ellipse(
+                    shadowScreenX,
+                    shadowScreenY,
+                    baseBallRadius*shadowScale,
+                    baseBallRadius*shadowScale*0.4,
+                    0,0,Math.PI*2);
+                ctx.fillStyle=`rgba(0,0,0,${shadowAlpha})`;
+                ctx.fill();
+            }
         }
 
         const ballScreenX=shadowScreenX;
