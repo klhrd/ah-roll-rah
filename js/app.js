@@ -87,7 +87,7 @@ function resizeCanvas()
 }
 window.addEventListener('resize',resizeCanvas);
 
-resizeCanvas();
+
 function gameLoop()
 {
     if(currentScene)
@@ -96,9 +96,11 @@ function gameLoop()
         if(currentScene.update)currentScene.update();
         if(currentScene.draw)currentScene.draw(ctx);
 
-        console.log(`WH: (${width},${height})\npointerXYRatio: \n(${pointerXRatio},${pointerYRatio})\npointerXY: \n(${pointerXRatio*width},${pointerYRatio*height})`);
+        //console.log(`WH: (${width},${height})\npointerXYRatio: \n(${pointerXRatio},${pointerYRatio})\npointerXY: \n(${pointerXRatio*width},${pointerYRatio*height})`);
     }
     requestAnimationFrame(gameLoop);
 }
 
 gameLoop();
+resizeCanvas();
+LevelManager.init();

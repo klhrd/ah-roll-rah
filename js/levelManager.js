@@ -3,6 +3,24 @@
 export const LevelManager=
 {
     cache:{},
+    totalLevels:0,
+
+    async init()
+    {
+        let id=1;
+        while(true)
+        {
+            const data=await this.getLevel(id);
+            console.log(data);
+            if(!data)break;
+            id++;
+            
+        }
+
+        this.totalLevels=id-1;
+        console.log(`logged ${this.totalLevels} levels`);
+        return this.totalLevels;
+    },
 
     async getLevel(levelId)
     {

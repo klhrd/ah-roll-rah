@@ -1,5 +1,6 @@
 // js/scenes/menuScenes.js
 
+import { LevelManager } from "../levelManager.js";
 import { Router } from "../router.js";
 
 /*
@@ -15,12 +16,15 @@ height
 export const MenuScene=
 {
     canvas: null,
+    currentPage:0,
+    totalPage:1,
+    PAGE_SIZE:12,
 
-    buttons:
+    navButtons:
     [
         {
             id:'back-home',
-            text:' <',
+            text:'<',
             textSizeRatio:0.8,
             xRatio:0.04,
             yRatio:0.04,
@@ -29,135 +33,46 @@ export const MenuScene=
             onClick:()=>Router.go('#home')
         },
         {
-            id:'start-level-1',
-            text:'1',
-            textSizeRatio:1,
+            id:'prev-btn',
+            text:'<PREV',
+            textSizeRatio:0.8,
             xRatio:0.04,
-            yRatio:0.28,
+            yRatio:0.85,
             widthRatio:0.20,
-            heightRatio:0.20,
-            onClick:()=>Router.go('#level-1')
+            heightRatio:0.1,
+            onClick:()=>Router.go('#home')
         },
         {
-            id:'start-level-2',
-            text:'2',
-            textSizeRatio:1,
-            xRatio:0.28,
-            yRatio:0.28,
-            widthRatio:0.20,
-            heightRatio:0.20,
-            onClick:()=>Router.go('#level-2')
-        },
-        {
-            id:'start-level-3',
-            text:'3',
-            textSizeRatio:1,
-            xRatio:0.52,
-            yRatio:0.28,
-            widthRatio:0.20,
-            heightRatio:0.20,
-            onClick:()=>Router.go('#level-3')
-        },
-        {
-            id:'start-level-4',
-            text:'4',
-            textSizeRatio:1,
+            id:'next-btn',
+            text:'NEXT>',
+            textSizeRatio:0.8,
             xRatio:0.76,
-            yRatio:0.28,
+            yRatio:0.85,
             widthRatio:0.20,
-            heightRatio:0.20,
-            onClick:()=>Router.go('#level-4')
-        },
-
-        {
-            id:'start-level-5',
-            text:'5',
-            textSizeRatio:1,
-            xRatio:0.04,
-            yRatio:0.52,
-            widthRatio:0.20,
-            heightRatio:0.20,
-            onClick:()=>Router.go('#level-5')
-        },
-        {
-            id:'start-level-6',
-            text:'6',
-            textSizeRatio:1,
-            xRatio:0.28,
-            yRatio:0.52,
-            widthRatio:0.20,
-            heightRatio:0.20,
-            onClick:()=>Router.go('#level-6')
-        },
-        {
-            id:'start-level-7',
-            text:'7',
-            textSizeRatio:1,
-            xRatio:0.52,
-            yRatio:0.52,
-            widthRatio:0.20,
-            heightRatio:0.20,
-            onClick:()=>Router.go('#level-7')
-        },
-        {
-            id:'start-level-8',
-            text:'8',
-            textSizeRatio:1,
-            xRatio:0.76,
-            yRatio:0.52,
-            widthRatio:0.20,
-            heightRatio:0.20,
-            onClick:()=>Router.go('#level-8')
-        },
-
-        {
-            id:'start-level-9',
-            text:'9',
-            textSizeRatio:1,
-            xRatio:0.04,
-            yRatio:0.76,
-            widthRatio:0.20,
-            heightRatio:0.20,
-            onClick:()=>Router.go('#level-9')
-        },
-        {
-            id:'start-level-A',
-            text:'A',
-            textSizeRatio:1,
-            xRatio:0.28,
-            yRatio:0.76,
-            widthRatio:0.20,
-            heightRatio:0.20,
-            onClick:()=>Router.go('#level-A')
-        },
-        {
-            id:'start-level-B',
-            text:'B',
-            textSizeRatio:1,
-            xRatio:0.52,
-            yRatio:0.76,
-            widthRatio:0.20,
-            heightRatio:0.20,
-            onClick:()=>Router.go('#level-B')
-        },
-        {
-            id:'start-level-C',
-            text:'C',
-            textSizeRatio:1,
-            xRatio:0.76,
-            yRatio:0.76,
-            widthRatio:0.20,
-            heightRatio:0.20,
-            onClick:()=>Router.go('#level-C')
+            heightRatio:0.1,
+            onClick:()=>Router.go('#home')
         },
     ],
 
     renderedBtns:[],
 
-    init(canvas)
+    async init(canvas)
     {
         this.canvas=canvas;
+
+        const total=LevelManager.totalLevels||1;
+        this.totalPage=Math.ceil(total/this.PAGE_SIZE);
+
         this.bindInput();
+    },
+
+    changePage(dir)
+    {
+        const target=this.currentPage+dir;
+        if(target>=0&&target<this.totalPage)
+        {
+            this.currentPage=target;
+        }
     },
 
     bindInput()
@@ -203,9 +118,49 @@ export const MenuScene=
         ctx.textAlign="center";
         ctx.fillText('AH-ROLL-RAH',width/2,height*0.14);
 
-        // render btns
-        this.buttons.forEach((btn)=>
+        // # btns
+        const dynamicBtns=[];
+        const startIdx=this.currentPage*this.PAGE_SIZE+1;
+        const endIdx=Math.min(startIdx+this.PAGE_SIZE-1,LevelManager.totalLevels);
+        // console.log(`startIdx: ${startIdx}, endIdx: ${endIdx}`);
+
+        const colCount=4;
+        const btnW=0.20;
+        const btnH=0.20;
+        const gapX=0.04;
+        const gapY=0.04;
+        const startY=0.18;
+        const levelBtnTextRatio=0.8;
+        
+        for(let i=startIdx;i<=endIdx;i++)
         {
+            const pageOffset=i-startIdx;                // 0-11
+            const col=pageOffset%colCount;              // 0-3
+            const row=Math.floor(pageOffset/colCount);  // 0-2
+
+            dynamicBtns.push(
+            {
+                id:`start-level-${String(i)}`,
+                text:`${String(i)}`,
+                textSizeRatio:levelBtnTextRatio,
+                xRatio:gapX+col*(btnW+gapX),
+                yRatio:startY+row*(btnH+gapY),
+                widthRatio:btnW,
+                heightRatio:btnH,
+                onClick:()=>Router.go(`#level-${String(i)}`)
+            });
+
+        }
+
+        const allBtns=[...this.navButtons,...dynamicBtns];
+        // console.log(allBtns);
+
+        // render btns
+        allBtns.forEach((btn)=>
+        {
+            if(btn.id==="prev-btn"&&this.currentPage===0)return;
+            if(btn.id==="next-btn"&&this.currentPage>=this.totalPage-1)return;
+
             const x=width*btn.xRatio;
             const y=height*btn.yRatio;
             const w=width*btn.widthRatio;
@@ -223,9 +178,17 @@ export const MenuScene=
             ctx.fillStyle='#eeeeee';
             ctx.font=`${32*width/800*btn?.textSizeRatio??1}px "Press Start 2P"`;
             ctx.textBaseline='middle';
-            ctx.fillText(btn.text,x+w/2-w*0.2,y+h/2);
+            if(btn.id.startsWith("start-"))
+            {
+                ctx.fillText(btn.text,x+w/2-0.2*w,y+h/2);
+            }
+            else
+            {
+                ctx.fillText(btn.text,x+w/2,y+h/2);
+            }
         });
 
+        //console.log(allBtns);
     },
 
     destroy()
