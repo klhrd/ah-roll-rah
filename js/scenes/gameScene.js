@@ -108,10 +108,11 @@ export const GameScene=
             return;
         }
 
+        // leaping
         if(this.ball.y>0||this.ballVy>0)
         {
             this.ball.y+=this.ballVy;
-            this.ballVy-=0.02;
+            this.ballVy-=0.012;
 
             if(this.ball.y<=0)
             {
@@ -157,7 +158,7 @@ export const GameScene=
             }
             case 2:     // 2: leap
             {
-                this.ballVy=0.35;
+                this.ballVy=0.25;
                 break;
             }
             case 9:     // 9: end
@@ -276,9 +277,9 @@ scale = fov / fov+z*40
                         ctx.fillStyle=(r%2===0)?"#444444":"#666666";
                         break;
                     }
-                    case 1:
+                    case 2:
                     {
-                        ctx.fillStyle="#7ec27e";
+                        ctx.fillStyle="#7bb37b";
                         break;
                     }
                     case 9:
