@@ -17,7 +17,8 @@ export const GameScene=
     state:'playing', // 'playing' | 'falling' | 'winning'
     animTimer:0,
     fallVy:0,
-
+    ballVy:0,
+    
     async init(levelId,canvas)
     {
         this.canvas=canvas;
@@ -25,6 +26,7 @@ export const GameScene=
         this.state='playing';
         this.animTimer=0;
         this.fallVy=0;
+        this.ballVy=0;
 
         this.levelData=await LevelManager.getLevel(levelId);
 
@@ -105,19 +107,31 @@ export const GameScene=
             return;
         }
 
+        if(this.ball.y>0||this.ballVy>0)
+        {
+            this.ball.y+=this.ballVy;
+            this.ballVy-=2;
+
+            if(this.ball.y<=0)
+            {
+                this.ball.y=0;
+                this.ballVy=0;
+            }
+        }
+
         this.ball.z+=this.speedZ;
 
         const row=Math.floor(this.ball.z);
         const col=Math.round(this.ball.x);
 
-        // 左右超出
+        // L/R edge
         if(col<0||col>=this.cols)
         {
             this.startFall();
             return;
         }
 
-        //超過終點
+        // end line
         if(row>this.map.length)
         {
             this.startWin();
@@ -125,18 +139,27 @@ export const GameScene=
         }
 
         const tileType=this.map[row]?.[col]??0;
+        
+        // flying
+        if(this.ball.y>0.1)return;
+
         switch (tileType)
         {
-            case 0:
+            case 0:     // 0: hole
             {
                 this.startFall();
                 break;
             }
-            case 1:
+            case 1:     // 1: normal ground
             {
                 break;
             }
-            case 9:
+            case 2:     // 2: leap
+            {
+                this.ballVy=0.35;
+                break;
+            }
+            case 9:     // 9: end
             {
                 this.startWin();
                 break;
@@ -252,9 +275,14 @@ scale = fov / fov+z*40
                         ctx.fillStyle=(r%2===0)?"#444444":"#666666";
                         break;
                     }
+                    case 1:
+                    {
+                        ctx.fillStyle="#7ec27e";
+                        break;
+                    }
                     case 9:
                     {
-                        ctx.fillStyle="#ff4060";
+                        ctx.fillStyle="#ff7575";
                         break;
                     }
                 }
