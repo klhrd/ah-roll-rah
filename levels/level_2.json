@@ -2,6 +2,7 @@
     "id": 2,
     "name": "level-2",
     "speedZ": 0.1,
+    "difficulty": 1,
     "cols": 5,
     "map": 
     [

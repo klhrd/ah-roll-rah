@@ -12,7 +12,7 @@ export const LevelManager=
         {
             const data=await this.getLevel(id);
             console.log(data);
-            if(!data)break;
+            if(!data)break; // break, not return
             id++;
             
         }

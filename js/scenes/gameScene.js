@@ -36,6 +36,7 @@ export const GameScene=
             console.log(`succeeded to load ${levelId}, levelData: `,this.levelData);
         }
 
+        this.levelData
         this.map=this.levelData.map;
         this.speedZ=this.levelData.speedZ;
         this.cols=this.levelData.cols;
@@ -110,7 +111,7 @@ export const GameScene=
         if(this.ball.y>0||this.ballVy>0)
         {
             this.ball.y+=this.ballVy;
-            this.ballVy-=2;
+            this.ballVy-=0.02;
 
             if(this.ball.y<=0)
             {
@@ -373,7 +374,8 @@ scale = fov / fov+z*40
         if(isSuccess)
         {
             Router.go(`#result-${this.levelData.id}-win`);
-            console.log(`go #result-${this.levelData.id}-win`)
+            console.log(`go #result-${this.levelData.id}-win`);
+
         }
         else
         {
