@@ -30,7 +30,10 @@ export const MenuScene=
             yRatio:0.04,
             widthRatio:0.10,
             heightRatio:0.1,
-            onClick:()=>Router.go('#home')
+            onClick:()=>
+            {
+                Router.go('#home');
+            }
         },
         {
             id:'prev-btn',
@@ -40,7 +43,10 @@ export const MenuScene=
             yRatio:0.85,
             widthRatio:0.20,
             heightRatio:0.1,
-            onClick:()=>Router.go('#home')
+            onClick:()=>
+            {
+                this.currentPage-=1;
+            }
         },
         {
             id:'next-btn',
@@ -50,7 +56,10 @@ export const MenuScene=
             yRatio:0.85,
             widthRatio:0.20,
             heightRatio:0.1,
-            onClick:()=>Router.go('#home')
+            onClick:()=>
+            {
+                this.currentPage+=1;
+            }
         },
     ],
 
