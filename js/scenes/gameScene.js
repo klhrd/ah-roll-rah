@@ -240,6 +240,9 @@ export const GameScene=
         const startRow=Math.max(0,Math.floor(cameraZ));
         const endRow=Math.min(this.map.length,startRow+50);
 
+        const gapZ=0.9;
+        const gapX=0.95;
+
         for(let r=endRow-1;r>=startRow;r--)
         {
             for(let c=0;c<this.cols;c++) // c++
@@ -247,8 +250,10 @@ export const GameScene=
                 const tileType=this.map[r][c];
                 if(tileType===0)continue;
 
-                const zNear=(r-cameraZ)+1;
-                const zFar=zNear+1;
+                const rowOffset=(1-gapZ)/2;
+                const zNear=(r-cameraZ)+1+rowOffset;
+                const zFar=zNear+gapZ;
+
                 // ignore behind body
                 if(zNear<=0.1)continue;
 /*
@@ -260,10 +265,10 @@ scale = fov / fov+z*40
                 // ?
                 const yNear=height-(zNear*rowHeightStep)*scaleNear;
                 const centerXNear=width/2+(c-(this.cols-1)/2)*baseColWidth*scaleNear;
-                const halfWidthNear=(baseColWidth*0.95/2)*scaleNear;
+                const halfWidthNear=(baseColWidth*gapX/2)*scaleNear;
                 const yFar=height-(zFar*rowHeightStep)*scaleFar;
                 const centerXFar=width/2+(c-(this.cols-1)/2)*baseColWidth*scaleFar;
-                const halfWidthFar=(baseColWidth*0.95/2)*scaleFar;
+                const halfWidthFar=(baseColWidth*gapX/2)*scaleFar;
 
                 switch (tileType)
                 {
