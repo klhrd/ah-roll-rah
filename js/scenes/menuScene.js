@@ -32,7 +32,7 @@ export const MenuScene=
             heightRatio:0.1,
             onClick:()=>
             {
-                Router.go('#home');
+                Router.go('#home')
             }
         },
         {
@@ -40,12 +40,12 @@ export const MenuScene=
             text:'<PREV',
             textSizeRatio:0.8,
             xRatio:0.04,
-            yRatio:0.85,
+            yRatio:0.87,
             widthRatio:0.20,
             heightRatio:0.1,
             onClick:()=>
             {
-                this.currentPage-=1;
+                MenuScene.changePage(-1);
             }
         },
         {
@@ -53,24 +53,31 @@ export const MenuScene=
             text:'NEXT>',
             textSizeRatio:0.8,
             xRatio:0.76,
-            yRatio:0.85,
+            yRatio:0.87,
             widthRatio:0.20,
             heightRatio:0.1,
             onClick:()=>
             {
-                this.currentPage+=1;
+                MenuScene.changePage(+1);
             }
         },
     ],
 
     renderedBtns:[],
 
-    async init(canvas)
+    async init(page=0,canvas)
     {
         this.canvas=canvas;
 
+        if(typeof LevelManager.init()!=="function")
+        {
+            await LevelManager.init();
+        }
+
         const total=LevelManager.totalLevels||1;
         this.totalPage=Math.ceil(total/this.PAGE_SIZE);
+
+        this.currentPage=Math.min(Math.max(0,page),Math.max(0,this.totalPage-1));
 
         this.bindInput();
     },
@@ -80,7 +87,7 @@ export const MenuScene=
         const target=this.currentPage+dir;
         if(target>=0&&target<this.totalPage)
         {
-            this.currentPage=target;
+            Router.go(`#menu-${target+1}`);
         }
     },
 
@@ -125,7 +132,7 @@ export const MenuScene=
         ctx.fillStyle="#e0e0ff";
         ctx.font=`bold ${40*width/800}px "Press Start 2P", monospace`;
         ctx.textAlign="center";
-        ctx.fillText('AH-ROLL-RAH',width/2,height*0.14);
+        ctx.fillText('AH-ROLL-RAH',width/2,height*0.10);
 
         // # btns
         const dynamicBtns=[];
@@ -137,7 +144,7 @@ export const MenuScene=
         const btnW=0.20;
         const btnH=0.20;
         const gapX=0.04;
-        const gapY=0.04;
+        const gapY=0.03;
         const startY=0.18;
         const levelBtnTextRatio=0.8;
         

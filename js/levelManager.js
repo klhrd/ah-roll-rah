@@ -11,8 +11,8 @@ export const LevelManager=
         while(true)
         {
             const data=await this.getLevel(id);
-            console.log(data);
-            if(!data)break; // break, not return
+            // console.log(data);
+            if(!data)break;
             id++;
             
         }

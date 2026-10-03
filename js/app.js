@@ -26,7 +26,7 @@ else
     currentScene.init(canvas);   
 }
 
-Router.init((route,levelId,isWin)=>
+Router.init((route,p1,p2)=>
 {
     if(currentScene&&currentScene.destroy)
     {
@@ -41,17 +41,17 @@ Router.init((route,levelId,isWin)=>
     else if(route==='menu')
     {
         currentScene=MenuScene;
-        currentScene.init(canvas);
+        currentScene.init(p1,canvas);
     }
     else if(route==='game')
     {
         currentScene=GameScene;
-        currentScene.init(levelId,canvas);
+        currentScene.init(p1,canvas);
     }
     else if(route==='result')
     {
         currentScene=ResultScene;
-        currentScene.init(levelId,isWin,canvas);
+        currentScene.init(p1,p2,canvas);
     }
 })
 

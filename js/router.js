@@ -12,9 +12,15 @@ export const Router=
             {
                 onRouteChange('home');
             }
-            else if(hash==='#menu')
+            else if(hash==='#menu'||hash.startsWith('#menu-'))
             {
-                onRouteChange('menu');
+                let page=0;
+                if(hash.startsWith('#menu-'))
+                {
+                    const parsedPage=parseInt(hash.replace('#menu-',''),10);
+                    page=isNaN(parsedPage)?0:Math.max(0,parsedPage-1);
+                }
+                onRouteChange('menu',page);
             }
             else if(hash.startsWith('#level-'))
             {
