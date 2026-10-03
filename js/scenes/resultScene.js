@@ -142,6 +142,8 @@ export const ResultScene=
         // render btns
         this.buttons.forEach((btn)=>
         {
+            if(btn.id==='next-btn'&&LevelManager.totalLevels<=this.levelId)return;
+
             const x=width*btn.xRatio;
             const y=height*btn.yRatio;
             const w=width*btn.widthRatio;
