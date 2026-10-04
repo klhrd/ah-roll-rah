@@ -106,9 +106,14 @@ export const InfoScene=
         // info
         ctx.fillStyle='#aaaaaa';
         ctx.font=`${16*width/800}px "Press Start 2P"`;
-        ctx.textAlign="center";
+        ctx.textAlign="left";
         ctx.textBaseline='middle';
-        ctx.fillText(`info`,width*0.5,height*0.5);
+        ctx.fillText(`AUTHOR`,width*0.1,height*0.35);
+        ctx.fillText(CONFIG.AUTHOR,width*0.30,height*0.35);
+        ctx.fillText(`GAMENAME`,width*0.1,height*0.5);
+        ctx.fillText(CONFIG.GAME_NAME,width*0.30,height*0.5);
+        ctx.fillText(`VERSION`,width*0.1,height*0.65);
+        ctx.fillText(CONFIG.VERSION,width*0.30,height*0.65);
     },
 
     destroy()
