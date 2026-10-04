@@ -64,6 +64,7 @@ export const MenuScene=
     ],
 
     renderedBtns:[],
+    levelDataCache:null,
 
     async init(page=0,canvas)
     {
@@ -76,8 +77,25 @@ export const MenuScene=
 
         const total=LevelManager.totalLevels||1;
         this.totalPage=Math.ceil(total/this.PAGE_SIZE);
-
         this.currentPage=Math.min(Math.max(0,page),Math.max(0,this.totalPage-1));
+
+        const startIdx=this.currentPage*this.PAGE_SIZE+1;
+        const endIdx=Math.min(startIdx+this.PAGE_SIZE-1,LevelManager.totalLevels);
+        
+        this.levelDataCache={};
+        const promises=[];
+
+        for(let i=startIdx;i<=endIdx;i++)
+        {
+            promises.push
+            (
+                LevelManager.getLevel(i).then(data=>
+                {
+                    this.levelDataCache[i]=data;
+                })
+            );
+        }
+        await Promise.all(promises);
 
         this.bindInput();
     },
@@ -163,9 +181,10 @@ export const MenuScene=
                 yRatio:startY+row*(btnH+gapY),
                 widthRatio:btnW,
                 heightRatio:btnH,
-                onClick:()=>Router.go(`#level-${String(i)}`)
+                onClick:()=>Router.go(`#level-${String(i)}`),
+                difficulty:this.levelDataCache[i].difficulty
             });
-
+            // console.log(this.levelDataCache[i]);
         }
 
         const allBtns=[...this.navButtons,...dynamicBtns];
@@ -196,13 +215,65 @@ export const MenuScene=
             ctx.textBaseline='middle';
             if(btn.id.startsWith("start-"))
             {
-                ctx.fillText(btn.text,x+w/2-0.2*w,y+h/2);
+                ctx.fillText(btn.text,x+w*0.3,y+h/2);
+                const levelId=parseInt(btn.id.replace("start-level-",''));
+
+                const difficultyStars={x:x+w*0.68,y:y+h*0.5}
+                
+                const drawOneStar=(x,y,radius)=>
+                {
+                    ctx.fillStyle="#ffffaa";
+
+                    ctx.beginPath()
+                    ctx.moveTo(x,y-radius);
+                    ctx.lineTo(x+radius,y);
+                    ctx.lineTo(x,y+radius);
+                    ctx.lineTo(x-radius,y);
+                    ctx.closePath();
+                    ctx.fill();
+
+                    ctx.strokeStyle="#aaaaaa"
+                    ctx.lineWidth=5*width/800*Math.pow(radius/(h*0.2),0.7);
+                    ctx.stroke();
+                }
+
+                switch (this.levelDataCache[levelId].difficulty)
+                {
+                    case 1:
+                    {
+                        drawOneStar(difficultyStars.x,difficultyStars.y,h*0.18);
+                        break;
+                    }
+                    case 2:
+                    {
+                        drawOneStar(difficultyStars.x-h*0.09,difficultyStars.y-h*0.09,h*0.12);
+                        drawOneStar(difficultyStars.x+h*0.09,difficultyStars.y+h*0.09,h*0.12);
+                        break;
+                    }
+                    case 3:
+                    {
+                        drawOneStar(difficultyStars.x,difficultyStars.y+h*0.03-h*0.14,h*0.09);
+                        drawOneStar(difficultyStars.x+h*0.14,difficultyStars.y+h*0.03,h*0.09);
+                        drawOneStar(difficultyStars.x-h*0.14,difficultyStars.y+h*0.03,h*0.09);
+                        break;
+                    }
+                    case 4:
+                    {
+                        drawOneStar(difficultyStars.x,difficultyStars.y+h*0.13,h*0.09);
+                        drawOneStar(difficultyStars.x,difficultyStars.y-h*0.13,h*0.09);
+                        drawOneStar(difficultyStars.x+h*0.13,difficultyStars.y,h*0.09);
+                        drawOneStar(difficultyStars.x-h*0.13,difficultyStars.y,h*0.09);
+                        break;
+                    }
+                }
             }
             else
             {
                 ctx.fillText(btn.text,x+w/2,y+h/2);
             }
         });
+
+
 
         //console.log(allBtns);
     },
