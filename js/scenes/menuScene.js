@@ -109,6 +109,8 @@ export const MenuScene=
         }
     },
 
+    hoverId:null,
+
     bindInput()
     {
         this.handleClick=(e)=>
@@ -128,7 +130,32 @@ export const MenuScene=
             }
         };
 
+        const startIdx=this.currentPage*this.PAGE_SIZE+1;
+        const endIdx=Math.min(startIdx+this.PAGE_SIZE-1,LevelManager.totalLevels);
+
+        this.handleHover=(e)=>
+        {
+            const rect=this.canvas.getBoundingClientRect();
+
+            const clickX=e.clientX-rect.left;
+            const clickY=e.clientY-rect.top;
+
+            let hovered=false
+
+            for(const btn of this.renderedBtns)
+            {
+                if(clickX>=btn.x&&clickX<=btn.x+btn.w&&clickY>=btn.y&&clickY<=btn.y+btn.h)
+                {
+                    this.hoverId=btn.id;
+                    hovered=true;
+                    break;
+                }   
+            }
+            if(!hovered)this.hoverId=null;
+        };
+
         this.canvas.addEventListener('click',this.handleClick);
+        this.canvas.addEventListener('mousemove',this.handleHover);
     },
 
     update()
@@ -201,7 +228,14 @@ export const MenuScene=
             const w=width*btn.widthRatio;
             const h=height*btn.heightRatio;
 
-            this.renderedBtns.push({x:x,y:y,w:w,h:h,onClick:btn.onClick});
+            this.renderedBtns.push
+            ({
+                id:btn.id,
+                x:x,
+                y:y,
+                w:w,
+                h:h,
+                onClick:btn.onClick});
 
             ctx.fillStyle='#303050';
             ctx.fillRect(x,y,w,h);
@@ -273,7 +307,18 @@ export const MenuScene=
             }
         });
 
-
+        // info
+        if(typeof this.hoverId==="string"&&this.hoverId?.startsWith("start-"))
+        {
+            const levelId=parseInt(this.hoverId.replace("start-level-",''));
+            // info
+            ctx.fillStyle='#aaaaaa';
+            ctx.font=`${16*width/800}px "Press Start 2P"`;
+            ctx.textAlign="center";
+            ctx.textBaseline='middle';
+            ctx.fillText(`start level ${levelId}`,width*0.5,height*0.9);
+            ctx.fillText(`difficulty: ${this.levelDataCache[levelId].difficulty}`,width*0.5,height*0.95);
+        }
 
         //console.log(allBtns);
     },
