@@ -3,23 +3,30 @@
 export const LevelManager=
 {
     cache:{},
+    levelsList:[],
     totalLevels:0,
 
     async init()
     {
-        let id=1;
-        while(true)
+        try
         {
-            const data=await this.getLevel(id);
-            // console.log(data);
-            if(!data)break;
-            id++;
-            
-        }
+            const response=await fetch("./levels/index.json");
+            if(!response.ok)
+            {
+                throw new Error(`failed to load level manifest`);
+            }
 
-        this.totalLevels=id-1;
-        console.log(`logged ${this.totalLevels} levels`);
-        return this.totalLevels;
+            this.levelsList=await response.json();
+            this.totalLevels=this.levelsList.length;
+            console.log(`logged ${this.totalLevels} levels`);
+            return this.totalLevels;
+        }
+        catch(error)
+        {
+            this.totalLevels=0;
+            console.error("failed to init LevelManager: ",error);
+            return this.totalLevels;
+        }
     },
 
     async getLevel(levelId)
