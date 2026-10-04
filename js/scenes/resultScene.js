@@ -18,9 +18,9 @@ export const ResultScene=
             text:'NEXT',
             textSizeRatio:1,
             xRatio:0.55,
-            yRatio:0.30,
+            yRatio:0.18,
             widthRatio:0.36,
-            heightRatio:0.15,
+            heightRatio:0.16,
             showIfWin:null,
             onClick:()=>
             {
@@ -32,9 +32,9 @@ export const ResultScene=
             text:'RETRY',
             textSizeRatio:1,
             xRatio:0.55,
-            yRatio:0.50,
+            yRatio:0.40,
             widthRatio:0.36,
-            heightRatio:0.15,
+            heightRatio:0.16,
             showIfWin:null,
             onClick:()=>
             {
@@ -46,9 +46,9 @@ export const ResultScene=
             text:'MENU',
             textSizeRatio:1,
             xRatio:0.55,
-            yRatio:0.70,
+            yRatio:0.62,
             widthRatio:0.36,
-            heightRatio:0.15,
+            heightRatio:0.16,
             showIfWin:null,
             onClick:()=>
             {
@@ -130,25 +130,42 @@ export const ResultScene=
         ctx.font=`bold ${60*width/800}px "Press Start 2P", monospace`;
         ctx.textAlign="center";
         ctx.textBaseline="middle";
-        ctx.fillText(this.isWin?"CLEAR!":"GAMEOVER",width*0.5,height*0.2);
+        if(this.isWin)
+        {
+            ctx.fillText("CLEAR!",width*0.3,height*0.3);
+        }
+        else
+        {
+            ctx.font=`bold ${67*width/800}px "Press Start 2P", monospace`; // 67
+            ctx.fillText("GAME",width*0.3,height*0.28);
+            ctx.fillText("OVER",width*0.3,height*0.40);
+        }
         
         // info
         ctx.fillStyle='#cccccc';
-        ctx.font=`${16*width/800}px "Press Start 2P"`;
+        ctx.font=`${20*width/800}px "Press Start 2P"`;
         ctx.textAlign="center";
         ctx.textBaseline='middle';
-        ctx.fillText(`Level ${this.levelId}`,width*0.25,height*0.40);
+        ctx.fillText(`Level ${this.levelId}`,width*0.29,height*0.56);
     
         // render btns
         this.buttons.forEach((btn)=>
         {
-            if(btn.id==='next-btn'&&LevelManager.totalLevels<=this.levelId)return;
-
             const x=width*btn.xRatio;
             const y=height*btn.yRatio;
             const w=width*btn.widthRatio;
             const h=height*btn.heightRatio;
-
+            
+            if(btn.id==='next-btn'&&LevelManager.totalLevels<=this.levelId)
+            {
+                ctx.fillStyle='#aaaaaa';
+                ctx.font=`${32*width/800*btn.textSizeRatio}px "Press Start 2P"`;
+                ctx.textAlign="center";
+                ctx.textBaseline='middle';
+                ctx.fillText("The End",x+w/2,y+h/2);
+                return;
+            }
+            
             this.renderedBtns.push({x:x,y:y,w:w,h:h,onClick:btn.onClick});
 
             ctx.fillStyle='#303050';
