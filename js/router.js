@@ -12,6 +12,10 @@ export const Router=
             {
                 onRouteChange('home');
             }
+            else if(hash==='#info')
+            {
+                onRouteChange('info');
+            }
             else if(hash==='#menu'||hash.startsWith('#menu-'))
             {
                 let page=0;

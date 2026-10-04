@@ -2,6 +2,7 @@
 import {GameScene} from './scenes/gameScene.js';
 import {MenuScene} from './scenes/menuScene.js';
 import {HomeScene} from './scenes/homeScene.js';
+import {InfoScene} from './scenes/infoScene.js';
 import {ResultScene} from './scenes/resultScene.js';
 import {LevelManager} from './levelManager.js';
 import {Router} from './router.js';
@@ -36,6 +37,11 @@ Router.init((route,p1,p2)=>
     if(route==='home')
     {
         currentScene=HomeScene;
+        currentScene.init(canvas);
+    }
+    else if(route==='info')
+    {
+        currentScene=InfoScene;
         currentScene.init(canvas);
     }
     else if(route==='menu')

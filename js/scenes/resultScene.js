@@ -66,7 +66,6 @@ export const ResultScene=
             showIfWin:false,
             onClick:()=>
             {
-                console.log("?");
                 Router.go(`#home`);
             }
 
