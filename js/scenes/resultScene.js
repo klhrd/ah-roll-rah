@@ -137,7 +137,7 @@ export const ResultScene=
         {
             ctx.font=`bold ${67*width/800}px "Press Start 2P", monospace`; // 67
             ctx.fillText("GAME",width*0.3,height*0.28);
-            ctx.fillText("OVER",width*0.3,height*0.40);
+            ctx.fillText("OVER",width*0.3,height*0.43);
         }
         
         // info
