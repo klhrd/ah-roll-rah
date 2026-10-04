@@ -1,6 +1,3 @@
-## AH-ROLL-RAH
-
-
 <table align="center" border="0" cellpadding="0" cellspacing="10">
     <tr>
         <td width="33%"><img src="./public/images/home.png" width="100%"></td>
@@ -63,5 +60,4 @@ An action-packed 3D ball-rolling platformer where you steer a high-speed ball th
 └── README.md
 
 ```
-
 
