@@ -335,6 +335,10 @@ export const MenuScene=
         {
             this.canvas.removeEventListener('click',this.handleClick);
         }
+        if(this.handleHover)
+        {
+            this.canvas.removeEventListener('mousemove',this.handleHover);
+        }
     }
 
 };

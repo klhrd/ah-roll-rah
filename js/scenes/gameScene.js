@@ -5,7 +5,8 @@ import { Router } from "../router.js";
 export const GameScene=
 {
     map:[],
-    speedZ:0.15,
+    speedZ:0.1,
+    baseSpeedZ:0.1,
     cols:5,
     ball:{x:0,y:0,z:0}, // y:height
     canvas:null,
@@ -81,11 +82,13 @@ export const GameScene=
     {
         if(!this.isLoaded)return;
 
+        const k=this.speedZ/this.baseSpeedZ;
+
         // falling
         if(this.state==="falling")
         {
-            this.animTimer+=0.03;
-            this.fallVy+=0.05;  // acc
+            this.animTimer+=0.03*k;
+            this.fallVy+=0.05*k*k;  // g_acc
             this.ball.y-=this.fallVy;
 
             if(this.animTimer>=1.0)
@@ -98,7 +101,7 @@ export const GameScene=
         // winning
         if(this.state==="winning")
         {
-            this.animTimer+=0.03;
+            this.animTimer+=0.03*k;
             this.ball.z+=this.speedZ*0.5;
 
             if(this.animTimer>=1.0)
@@ -112,7 +115,7 @@ export const GameScene=
         if(this.ball.y>0||this.ballVy>0)
         {
             this.ball.y+=this.ballVy;
-            this.ballVy-=0.012;
+            this.ballVy-=0.012*k*k;
 
             if(this.ball.y<=0)
             {
@@ -158,7 +161,7 @@ export const GameScene=
             }
             case 2:     // 2: leap
             {
-                this.ballVy=0.25;
+                this.ballVy=0.25*k;
                 break;
             }
             case 9:     // 9: end
@@ -180,7 +183,7 @@ export const GameScene=
 
         this.state="falling";
         this.animTimer=0;
-        this.fallVy=0.05;
+        this.fallVy=0.05*k;
     },
 
     startWin()
