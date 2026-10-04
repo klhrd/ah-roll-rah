@@ -64,13 +64,13 @@ export const MenuScene=
     ],
 
     renderedBtns:[],
-    levelDataCache:null,
+    levelDataCache:{},
 
     async init(page=0,canvas)
     {
         this.canvas=canvas;
 
-        if(typeof LevelManager.init()!=="function")
+        if(typeof LevelManager.init==="function")
         {
             await LevelManager.init();
         }
@@ -199,6 +199,8 @@ export const MenuScene=
             const col=pageOffset%colCount;              // 0-3
             const row=Math.floor(pageOffset/colCount);  // 0-2
 
+            const difficulty=this.levelDataCache[i]?.difficulty??0;
+
             dynamicBtns.push(
             {
                 id:`start-level-${String(i)}`,
@@ -209,7 +211,7 @@ export const MenuScene=
                 widthRatio:btnW,
                 heightRatio:btnH,
                 onClick:()=>Router.go(`#level-${String(i)}`),
-                difficulty:this.levelDataCache[i].difficulty
+                difficulty:difficulty
             });
             // console.log(this.levelDataCache[i]);
         }
@@ -271,7 +273,8 @@ export const MenuScene=
                     ctx.stroke();
                 }
 
-                switch (this.levelDataCache[levelId].difficulty)
+                const levelData=this.levelDataCache[levelId]
+                switch (levelData?levelData.difficulty:0)
                 {
                     case 1:
                     {
@@ -311,13 +314,16 @@ export const MenuScene=
         if(typeof this.hoverId==="string"&&this.hoverId?.startsWith("start-"))
         {
             const levelId=parseInt(this.hoverId.replace("start-level-",''));
+            const levelData=this.levelDataCache[levelId];
+            const diffText=levelData?`difficulty: ${levelData.difficulty}`:`loading...`;
+
             // info
             ctx.fillStyle='#aaaaaa';
             ctx.font=`${16*width/800}px "Press Start 2P"`;
             ctx.textAlign="center";
             ctx.textBaseline='middle';
             ctx.fillText(`start level ${levelId}`,width*0.5,height*0.9);
-            ctx.fillText(`difficulty: ${this.levelDataCache[levelId].difficulty}`,width*0.5,height*0.95);
+            ctx.fillText(diffText,width*0.5,height*0.95);
         }
 
         //console.log(allBtns);
