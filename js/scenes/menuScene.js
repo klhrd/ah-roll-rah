@@ -2,7 +2,7 @@
 
 import { LevelManager } from "../levelManager.js";
 import { Router } from "../router.js";
-
+import { ProgressManager } from "../progressManager.js";
 /*
 
 width
@@ -253,8 +253,8 @@ export const MenuScene=
             {
                 ctx.fillText(btn.text,x+w*0.3,y+h/2);
                 const levelId=parseInt(btn.id.replace("start-level-",''));
-
                 const difficultyStars={x:x+w*0.68,y:y+h*0.5}
+                const isCompleted=ProgressManager.isLevelCompleted(levelId);
                 
                 const drawOneStar=(x,y,radius)=>
                 {
@@ -302,6 +302,33 @@ export const MenuScene=
                         drawOneStar(difficultyStars.x-h*0.13,difficultyStars.y,h*0.09);
                         break;
                     }
+                }
+
+                if(isCompleted)
+                {
+                    console.log("1");
+                    ctx.fillStyle='#00000090';
+                    ctx.fillRect(x,y,w,h);
+
+
+                    ctx.fillStyle="#b1ffaaaa";
+                    ctx.beginPath()
+                    ctx.moveTo(x+0.4*h,y+0.6*h-0.05*h);
+                    ctx.lineTo(x+0.6*h,y+0.8*h-0.05*h);
+                    ctx.lineTo(x+1.0*h,y+0.4*h-0.05*h);
+                    ctx.lineTo(x+0.9*h,y+0.3*h-0.05*h);
+                    ctx.lineTo(x+0.6*h,y+0.6*h-0.05*h);
+                    ctx.lineTo(x+0.5*h,y+0.5*h-0.05*h);
+
+                    ctx.closePath();
+                    ctx.fill();
+
+                    ctx.strokeStyle="#aaaaaa"
+                    ctx.lineWidth=5*width/800*Math.pow(1/(h*0.2),0.7);
+                    ctx.stroke();
+                    
+                    ctx.textAlign="center"
+                    ctx.textBaseline='middle';
                 }
             }
             else

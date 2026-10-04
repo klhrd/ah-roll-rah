@@ -1,6 +1,7 @@
 // scenes/gameScene.js
 import { LevelManager } from "../levelManager.js";
 import { Router } from "../router.js";
+import { ProgressManager } from "../progressManager.js";
 
 export const GameScene=
 {
@@ -385,6 +386,7 @@ scale = fov / fov+z*40
         if(isSuccess)
         {
             Router.go(`#result-${this.levelData.id}-win`);
+            ProgressManager.markLevelCompleted(this.levelData.id);
             console.log(`go #result-${this.levelData.id}-win`);
 
         }
