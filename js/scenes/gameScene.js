@@ -181,6 +181,8 @@ export const GameScene=
     {
         if(this.state!=="playing")return;
 
+        const k=this.speedZ/this.baseSpeedZ;
+        
         this.state="falling";
         this.animTimer=0;
         this.fallVy=0.05*k;
