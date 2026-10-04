@@ -15,11 +15,25 @@ export const HomeScene=
         {
             id:'go-menu',
             text:'PLAY',
+            textSizeRatio:1.5,
             xRatio:0.30,
             yRatio:0.40,
             widthRatio:0.40,
             heightRatio:0.20,
             onClick:()=>Router.go('#menu')
+        },
+        {
+            id:'go-info',
+            text:'i',
+            textSizeRatio:0.5,
+            xRatio:0.92,
+            yRatio:0.9,
+            widthRatio:0.06,
+            heightRatio:0.08,
+            onClick:()=>
+            {
+                Router.go('#info')
+            }
         },
     ],
 
@@ -89,11 +103,11 @@ export const HomeScene=
             ctx.fillRect(x,y,w,h);
 
             ctx.strokeStyle='#dddddd';
-            ctx.lineWidth=5*width/800;
+            ctx.lineWidth=5*width/800*btn.textSizeRatio;
             ctx.strokeRect(x+10,y+10,w-20,h-20);
 
             ctx.fillStyle='#eeeeee';
-            ctx.font=`${32*width/800}px "Press Start 2P"`;
+            ctx.font=`${32*width/800*btn.textSizeRatio}px "Press Start 2P"`;
             ctx.textAlign="center";
             ctx.textBaseline='middle';
             ctx.fillText(btn.text,x+w/2,y+h/2);
