@@ -3,7 +3,7 @@
 export const CONFIG=
 {
     GAME_NAME:'AH-ROLL-RAH',
-    VERSION:'2.1.0',
+    VERSION:'2.1.1',
     AUTHOR:'@klhrd',
 
     get versionText()
