@@ -306,7 +306,6 @@ export const MenuScene=
 
                 if(isCompleted)
                 {
-                    console.log("1");
                     ctx.fillStyle='#00000090';
                     ctx.fillRect(x,y,w,h);
 
