@@ -213,10 +213,6 @@ export const GameScene=
             ctx.fillText('LOADING...',width*0.5,height*0.5);
         }
 
-        // # clean all
-        ctx.fillStyle='#1a1a2e'; // bg color
-        ctx.fillRect(0,0,width,height);
-        
         ctx.save();
         if(this.state==='winning')
         {
