@@ -140,7 +140,7 @@ export const GameScene=
         // end line
         if(row>this.map.length)
         {
-            this.startWin();
+            this.startFall();
             return;
         }
 
