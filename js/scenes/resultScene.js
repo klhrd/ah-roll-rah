@@ -52,7 +52,7 @@ export const ResultScene=
             showIfWin:null,
             onClick:()=>
             {
-                Router.go(`#menu`);
+                Router.go(`#menu-${Math.ceil(Number(ResultScene.levelId)/12)}`);
             }
         },
         {
