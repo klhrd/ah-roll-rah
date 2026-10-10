@@ -46,6 +46,7 @@ An action-packed 3D ball-rolling platformer where you steer a high-speed ball th
 │   │   └── resultScene.js
 │   │   
 │   ├── app.js
+│   ├── auroraBackground.js
 │   ├── config.js
 │   ├── levelManager.js
 │   ├── progressManager.js
