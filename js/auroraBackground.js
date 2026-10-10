@@ -30,11 +30,28 @@ export class AuroraBg
                 rayDensity:1.0,
             },
 
+            colorProfile:
+            {
+                pinkLimitY:height*0.25,     // upper sky
+                violetStartY:height*0.55,   // lower sky
+                pinkHue:325,
+                violetHue:280,
+                stops:
+                {
+                    top:            0.00,
+                    upperGlow:      0.15,
+                    mainBody:       0.40,
+                    lowerBright:    0.65,
+                    bottomFringe:   0.88,
+                    bottomFade:     1.00,
+                }
+            },
+
             layers:
             [
-                {baseY:height*0.15,height:height*0.45,speed:0.55,amp1:50,amp2:30},
-                {baseY:height*0.20,height:height*0.50,speed:0.40,amp1:60,amp2:35},
-                {baseY:height*0.12,height:height*0.40,speed:0.75,amp1:40,amp2:20}
+                {baseY:height*0.15,height:height*0.45,speed:0.55,amp1:50,amp2:30,mainHue:150},  // green
+                {baseY:height*0.20,height:height*0.50,speed:0.40,amp1:60,amp2:35,mainHue:165},  // blue/green
+                {baseY:height*0.12,height:height*0.40,speed:0.75,amp1:40,amp2:20,mainHue:140}   // mint green
             ]
 
 
@@ -92,7 +109,7 @@ export class AuroraBg
         });
         ctx.restore();
 
-        //
+        // aurora
         this.config.layers.forEach(l=>
         {
             this.drawAuroraLayer(ctx,l);
@@ -102,17 +119,19 @@ export class AuroraBg
     drawAuroraLayer(ctx,layer)
     {
         const step=this.config.geometry.renderStep;
+        const cfg=this.config;
 
         ctx.save();
-        ctx.strokeStyle="#80ffaa50";
-        ctx.lineWidth=1;
+        ctx.globalCompositeOperation='lighter';
         
         const t=this.time*layer.speed;
-
+        const ATM_PINK_LIMIT=cfg.colorProfile.pinkLimitY;
+        const ATM_VIOLET_START=cfg.colorProfile.violetStartY;
+        
         for(let x=0;x<this.width;x+=step)
         {
-            const sharpWarp=(1.0-Math.abs(Math.sin(x*0.04+t*0.5)))*this.config.geometry.warpStrength;
-            const noiseWarp=(this.fastNoise1D(x*0.006-t*0.3)-0.5)*(this.config.geometry.warpStrength*0.93)
+            const sharpWarp=(1.0-Math.abs(Math.sin(x*0.04+t*0.5)))*cfg.geometry.warpStrength;
+            const noiseWarp=(this.fastNoise1D(x*0.006-t*0.3)-0.5)*(cfg.geometry.warpStrength*0.93)
             const xw=x+sharpWarp+noiseWarp;
 
             const r1=(1.0-Math.abs(Math.sin(xw*0.0031+t)))*layer.amp1;
@@ -121,11 +140,44 @@ export class AuroraBg
 
             const topY=layer.baseY=+r1-r2+r3;
             const currentHeight=layer.height*(0.8+(1.0-Math.abs(Math.sin(xw*0.005)))*0.35);
+            const bottomY=topY+currentHeight;
 
-            ctx.beginPath();
-            ctx.moveTo(x,topY);
-            ctx.lineTo(x,topY+currentHeight);
-            ctx.stroke();
+            const grad=ctx.createLinearGradient(0,topY,0,bottomY);
+            const baseHue=layer.mainHue;
+            const stops=cfg.colorProfile.stops;
+
+            // upper sky
+            if(topY<ATM_PINK_LIMIT)
+            {
+                const pinkStrength=Math.min(1,(ATM_PINK_LIMIT-topY)/80);
+                grad.addColorStop(stops.top,`hsla(${cfg.colorProfile.pinkHue+5},90%,65%,0)`);
+                grad.addColorStop(stops.upperGlow,`hsla(${cfg.colorProfile.pinkHue},95%,60%,${0.1+pinkStrength*0.35})`);
+            }
+            else
+            {
+                grad.addColorStop(stops.top,`hsla(${baseHue},90%,60%,0)`);
+            }
+
+            // mid skj
+            grad.addColorStop(stops.mainBody,`hsla(${baseHue},100%,52%,0.28)`);
+            grad.addColorStop(stops.lowerBright,`hsla(${baseHue+20},100%,72%,0.3)`);
+
+            // lower sky
+            if(bottomY>ATM_VIOLET_START)
+            {
+                const violetStrength=Math.min(1,(bottomY-ATM_VIOLET_START)/100);
+                grad.addColorStop(stops.bottomFringe,`hsla(${cfg.colorProfile.violetHue+5},95%,65%,${0.1+violetStrength*0.35})`);
+                grad.addColorStop(stops.bottomFade,`hsla(${cfg.colorProfile.violetHue-10},85%,35%,0)`);
+            }
+            else
+            {
+                grad.addColorStop(stops.bottomFringe,`hsla(${baseHue+35},80%,40%,0.08)`);
+                grad.addColorStop(stops.bottomFade,`hsla(${baseHue+55},70%,30%,0)`);
+            }
+
+
+            ctx.fillStyle=grad;
+            ctx.fillRect(x,topY,step,currentHeight);
             
         }
         ctx.restore();
