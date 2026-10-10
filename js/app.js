@@ -6,7 +6,7 @@ import {InfoScene} from './scenes/infoScene.js';
 import {ResultScene} from './scenes/resultScene.js';
 import {LevelManager} from './levelManager.js';
 import {Router} from './router.js';
-import { AuroraBg } from './auroraBackground.js';
+import {AuroraBg} from './auroraBackground.js';
 
 /** @type {HTMLCanvasElement} */
 const canvas=document.getElementById('main-canvas');
@@ -47,7 +47,7 @@ Router.init((route,p1,p2)=>
     else if(route==='info')
     {
         currentScene=InfoScene;
-        currentScene.init(canvas);
+        currentScene.init(canvas,auroraBg);
     }
     else if(route==='menu')
     {

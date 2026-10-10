@@ -8,6 +8,8 @@ export class AuroraBg
         this.height=height;
         this.time=0;
 
+        this.enabled=true;
+
         this.LUT_SIZE=512;
         this.noiseLUT=new Float32Array(this.LUT_SIZE);
         for(let i=1;i<this.LUT_SIZE;i++)
@@ -85,6 +87,17 @@ export class AuroraBg
         }));
     }
 
+    toggle()
+    {
+        this.enabled=!this.enabled;
+        return this.enabled;
+    }
+
+    setEnabled(val)
+    {
+        this.enabled=Boolean(val);
+    }
+
     fastNoise1D(x)
     {
         const xi=Math.floor(x);
@@ -105,6 +118,13 @@ export class AuroraBg
         this.width=ctx.canvas.width;
         this.height=ctx.canvas.height;
         
+        if(!this.enabled)
+        {
+            ctx.fillStyle="#1a1a2e";
+            ctx.fillRect(0,0,this.width,this.height);
+            return;
+        }
+
         // sky
         const skyGrad=ctx.createLinearGradient(0,0,0,this.height);
         const colors=this.config.enviroment.skyColors;
