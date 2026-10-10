@@ -6,14 +6,19 @@ import {InfoScene} from './scenes/infoScene.js';
 import {ResultScene} from './scenes/resultScene.js';
 import {LevelManager} from './levelManager.js';
 import {Router} from './router.js';
+import {AuroraBg} from './auroraBackground.js';
 
 /** @type {HTMLCanvasElement} */
 const canvas=document.getElementById('main-canvas');
 const ctx=canvas.getContext('2d');
 let width=canvas.width;
 let height=canvas.height;
-
+let auroraBg=new AuroraBg(canvas.width,canvas.height);
 let currentScene=null;
+
+gameLoop();
+resizeCanvas();
+LevelManager.init();
 
 const DEV_MODE=false;
 if (DEV_MODE)
@@ -42,7 +47,7 @@ Router.init((route,p1,p2)=>
     else if(route==='info')
     {
         currentScene=InfoScene;
-        currentScene.init(canvas);
+        currentScene.init(canvas,auroraBg);
     }
     else if(route==='menu')
     {
@@ -93,20 +98,20 @@ function resizeCanvas()
 }
 window.addEventListener('resize',resizeCanvas);
 
-
 function gameLoop()
 {
-    if(currentScene)
+    if(auroraBg)auroraBg.update();
+    if(currentScene&&currentScene.update)
     {
-
         if(currentScene.update)currentScene.update();
-        if(currentScene.draw)currentScene.draw(ctx);
-
-        //console.log(`WH: (${width},${height})\npointerXYRatio: \n(${pointerXRatio},${pointerYRatio})\npointerXY: \n(${pointerXRatio*width},${pointerYRatio*height})`);
     }
+
+    if(auroraBg)auroraBg.draw(ctx);
+    if(currentScene&&currentScene.draw)
+    {
+        if(currentScene.draw)currentScene.draw(ctx);
+    }
+    
+    //console.log(`WH: (${width},${height})\npointerXYRatio: \n(${pointerXRatio},${pointerYRatio})\npointerXY: \n(${pointerXRatio*width},${pointerYRatio*height})`);
     requestAnimationFrame(gameLoop);
 }
-
-gameLoop();
-resizeCanvas();
-LevelManager.init();

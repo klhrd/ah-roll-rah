@@ -2,6 +2,7 @@
 
 import { Router } from "../router.js";
 import { CONFIG } from "../config.js";
+
 /*
 
 */
@@ -9,6 +10,7 @@ import { CONFIG } from "../config.js";
 export const InfoScene=
 {
     canvas: null,
+    auroraBg:null,
 
     buttons:
     [
@@ -25,13 +27,30 @@ export const InfoScene=
                 Router.go('#home')
             }
         },
+        {
+            id:'toggle-aurora',
+            text:'',
+            textSizeRatio:0.55,
+            xRatio:0.10,
+            yRatio:0.75,
+            widthRatio:0.40,
+            heightRatio:0.13,
+            onClick:()=>
+            {
+                if(InfoScene.auroraBg)
+                {
+                    InfoScene.auroraBg.toggle();
+                }
+            }
+        },
     ],
 
     renderedBtns:[],
 
-    init(canvas)
+    init(canvas,auroraBg=null)
     {
         this.canvas=canvas;
+        this.auroraBg=auroraBg;
         this.bindInput();
     },
 
@@ -69,9 +88,6 @@ export const InfoScene=
         this.renderedBtns=[];
         ctx.imageSmoothingEnabled = false;
 
-        ctx.fillStyle="#1a1a2e";
-        ctx.fillRect(0,0,width,height);
-
         // title
         ctx.fillStyle="#e0e0ff";
         ctx.font=`bold ${30*width/800}px "Press Start 2P", monospace`;
@@ -97,10 +113,19 @@ export const InfoScene=
             ctx.strokeRect(x+10,y+10,w-20,h-20);
 
             ctx.fillStyle='#eeeeee';
-            ctx.font=`${32*width/800}px "Press Start 2P"`;
+            ctx.font=`${32*width/800*btn?.textSizeRatio??1}px "Press Start 2P"`;
             ctx.textAlign="center";
             ctx.textBaseline='middle';
-            ctx.fillText(btn.text,x+w/2,y+h/2);
+
+            let displayText=btn.text;
+            if(btn.id==="toggle-aurora")
+            {
+                const isOn=this.auroraBg?this.auroraBg.enabled:true;
+                displayText=`AURORA BG: ${isOn?"ON":"OFF"}`;
+                ctx.fillStyle=isOn?"#88ff88":"#aaaaaa"
+            }
+
+            ctx.fillText(displayText,x+w/2,y+h/2);
         });
 
         // info

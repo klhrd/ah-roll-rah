@@ -121,9 +121,6 @@ export const ResultScene=
         this.renderedBtns=[];
         ctx.imageSmoothingEnabled = false;
 
-        ctx.fillStyle="#1a1a2e50";
-        ctx.fillRect(0,0,width,height);
-
         // title
         ctx.fillStyle=this.isWin?"#e0e0ff":"#ffe0e0";
         ctx.font=`bold ${60*width/800}px "Press Start 2P", monospace`;

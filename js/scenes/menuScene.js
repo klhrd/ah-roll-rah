@@ -170,9 +170,6 @@ export const MenuScene=
         this.renderedBtns=[];
         ctx.imageSmoothingEnabled = false;
 
-        ctx.fillStyle="#1a1a2e";
-        ctx.fillRect(0,0,width,height);
-
         // title
         ctx.fillStyle="#e0e0ff";
         ctx.font=`bold ${40*width/800}px "Press Start 2P", monospace`;
