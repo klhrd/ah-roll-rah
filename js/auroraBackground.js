@@ -17,6 +17,13 @@ export class AuroraBg
 
         this.config=
         {
+            animation:
+            {
+                globalSpeed:1.0,
+                waveMoveSpeed:1.0,
+                rayFlickerSpeed:1.2
+            },
+
             enviroment:
             {
                 starCount:150,
@@ -47,11 +54,22 @@ export class AuroraBg
                 }
             },
 
+            brightness:
+            {
+                minOpacity:0.05,
+                maxOpacity:1.00,
+                baseRayOpacity:0.15,
+                rayIntensity:0.55,
+                peakPower:1.8,
+                peakBrightnessBoost:0.75
+            },
+
             layers:
             [
                 {baseY:height*0.15,height:height*0.45,speed:0.55,amp1:50,amp2:30,mainHue:150},  // green
                 {baseY:height*0.20,height:height*0.50,speed:0.40,amp1:60,amp2:35,mainHue:165},  // blue/green
-                {baseY:height*0.12,height:height*0.40,speed:0.75,amp1:40,amp2:20,mainHue:140}   // mint green
+                {baseY:height*0.12,height:height*0.40,speed:0.75,amp1:40,amp2:20,mainHue:140},  // mint green
+                {baseY:height*0.25,height:height*0.55,speed:0.30,amp1:60,amp2:40,mainHue:155}
             ]
 
 
@@ -79,7 +97,7 @@ export class AuroraBg
 
     update(speedMultiplier=1.0)
     {
-        this.time+=0.01*speedMultiplier;
+        this.time+=0.01*speedMultiplier*this.config.animation.globalSpeed;
     }
 
     draw(ctx)
@@ -125,11 +143,16 @@ export class AuroraBg
         ctx.globalCompositeOperation='lighter';
         
         const t=this.time*layer.speed;
+        const rayTime=this.time*cfg.animation.rayFlickerSpeed;
+
         const ATM_PINK_LIMIT=cfg.colorProfile.pinkLimitY;
         const ATM_VIOLET_START=cfg.colorProfile.violetStartY;
         
         for(let x=0;x<this.width;x+=step)
         {
+            const stepBlock=Math.floor((x+t*40)*0.015);
+            const stepShift=Math.abs(Math.sin(stepBlock*1.7))*20;
+
             const sharpWarp=(1.0-Math.abs(Math.sin(x*0.04+t*0.5)))*cfg.geometry.warpStrength;
             const noiseWarp=(this.fastNoise1D(x*0.006-t*0.3)-0.5)*(cfg.geometry.warpStrength*0.93)
             const xw=x+sharpWarp+noiseWarp;
@@ -142,6 +165,15 @@ export class AuroraBg
             const currentHeight=layer.height*(0.8+(1.0-Math.abs(Math.sin(xw*0.005)))*0.35);
             const bottomY=topY+currentHeight;
 
+            const rayFreq=cfg.geometry.rayDensity;
+            const noiseRay=this.fastNoise1D(x*0.03*rayFreq+rayTime*1.2);
+            const sharpRay=1.0-Math.abs(Math.sin(x*0.08*rayFreq+rayTime*2.5)*Math.cos(x*0.15*rayFreq-rayTime))
+            const rayNoise=noiseRay*0.5+sharpRay*0.5;
+
+            const peakFactor=Math.pow(r1/layer.amp1,cfg.brightness.peakPower);
+            const alphaMod=(cfg.brightness.baseRayOpacity+rayNoise*cfg.brightness.rayIntensity)*
+                            (0.55+peakFactor*cfg.brightness.peakBrightnessBoost);
+
             const grad=ctx.createLinearGradient(0,topY,0,bottomY);
             const baseHue=layer.mainHue;
             const stops=cfg.colorProfile.stops;
@@ -151,7 +183,7 @@ export class AuroraBg
             {
                 const pinkStrength=Math.min(1,(ATM_PINK_LIMIT-topY)/80);
                 grad.addColorStop(stops.top,`hsla(${cfg.colorProfile.pinkHue+5},90%,65%,0)`);
-                grad.addColorStop(stops.upperGlow,`hsla(${cfg.colorProfile.pinkHue},95%,60%,${0.1+pinkStrength*0.35})`);
+                grad.addColorStop(stops.upperGlow,`hsla(${cfg.colorProfile.pinkHue},95%,${60+peakFactor*20}%,${0.1+pinkStrength*0.35})`);
             }
             else
             {
@@ -160,7 +192,7 @@ export class AuroraBg
 
             // mid skj
             grad.addColorStop(stops.mainBody,`hsla(${baseHue},100%,52%,0.28)`);
-            grad.addColorStop(stops.lowerBright,`hsla(${baseHue+20},100%,72%,0.3)`);
+            grad.addColorStop(stops.lowerBright,`hsla(${baseHue+20},100%,72%,${0.18+peakFactor*0.35})`);
 
             // lower sky
             if(bottomY>ATM_VIOLET_START)
@@ -175,7 +207,8 @@ export class AuroraBg
                 grad.addColorStop(stops.bottomFade,`hsla(${baseHue+55},70%,30%,0)`);
             }
 
-
+            ctx.globalAlpha=Math.min(cfg.brightness.maxOpacity,Math.max(cfg.brightness.minOpacity,alphaMod));
+            
             ctx.fillStyle=grad;
             ctx.fillRect(x,topY,step,currentHeight);
             
