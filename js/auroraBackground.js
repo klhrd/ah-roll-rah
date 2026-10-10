@@ -40,14 +40,14 @@ export class AuroraBg
 
             geometry:
             {
-                renderStep:2,
+                renderStep:8,          // both 2 and 10 look great but it seems 10 looks more arcade-ish :)
                 warpStrength:75,
-                rayDensity:1.0,
+                rayDensity:0.3,
             },
 
             colorProfile:
             {
-                pinkLimitY:height*0.25,     // upper sky
+                pinkLimitY:height*0.16,     // upper sky
                 violetStartY:height*0.55,   // lower sky
                 pinkHue:325,
                 violetHue:280,
@@ -67,7 +67,7 @@ export class AuroraBg
                 minOpacity:0.05,
                 maxOpacity:1.00,
                 baseRayOpacity:0.15,
-                rayIntensity:0.55,
+                rayIntensity:0.25,
                 peakPower:1.8,
                 peakBrightnessBoost:0.75
             },
