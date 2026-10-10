@@ -90,6 +90,8 @@ function resizeCanvas()
 
     width=canvas.width;
     height=canvas.height;
+
+    if(auroraBg)auroraBg.resize(width,height);
     if(currentScene)
     {
         if(currentScene.update)currentScene.update();

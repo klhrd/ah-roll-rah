@@ -93,6 +93,31 @@ export class AuroraBg
         }));
     }
 
+    resize(width,height)
+    {
+        this.width=width;
+        this.height=height;
+        
+        this.config.colorProfile.pinkLimitY=height*0.25,     // upper sky
+        this.config.colorProfile.violetStartY=height*0.55,   // lower sky
+        this.config.layers=
+        [
+            {baseY:height*0.15,height:height*0.45,speed:0.55,amp1:50,amp2:30,mainHue:150},  // green
+            {baseY:height*0.20,height:height*0.50,speed:0.40,amp1:60,amp2:35,mainHue:165},  // blue/green
+            {baseY:height*0.12,height:height*0.40,speed:0.75,amp1:40,amp2:20,mainHue:140},  // mint green
+            {baseY:height*0.25,height:height*0.55,speed:0.30,amp1:60,amp2:40,mainHue:155}
+        ];
+
+        this.stars=Array.from({length:this.config.enviroment.starCount},()=>
+        ({
+            x:Math.random()*this.width,
+            y:Math.random()*this.height*0.8,
+            radius:Math.random()*1.2+0.3,
+            alpha:Math.random(),
+            speed:Math.random()*0.03+0.01
+        }));
+    }
+
     toggle()
     {
         this.enabled=!this.enabled;
