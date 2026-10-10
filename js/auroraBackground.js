@@ -1,5 +1,7 @@
 // js/auroraBackground.js
 
+const STORAGE_KEY='ah_roll_rah_aurora_enabled'
+
 export class AuroraBg
 {
     constructor(width,height)
@@ -9,6 +11,10 @@ export class AuroraBg
         this.time=0;
 
         this.enabled=true;
+
+        const savedState=localStorage.getItem(STORAGE_KEY);
+        this.enabled=savedState!==null?JSON.parse(savedState):true;
+
 
         this.LUT_SIZE=512;
         this.noiseLUT=new Float32Array(this.LUT_SIZE);
@@ -90,12 +96,26 @@ export class AuroraBg
     toggle()
     {
         this.enabled=!this.enabled;
+        this.saveState();
         return this.enabled;
     }
 
     setEnabled(val)
     {
         this.enabled=Boolean(val);
+        this.saveState();
+    }
+
+    saveState()
+    {
+        try
+        {
+            localStorage.setItem(STORAGE_KEY,JSON.stringify(this.enabled));
+        }
+        catch(e)
+        {
+            console.error('fail to save: ',e);
+        }
     }
 
     fastNoise1D(x)
