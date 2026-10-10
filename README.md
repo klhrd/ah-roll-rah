@@ -11,7 +11,7 @@
     </tr>
 </table>
 
-<h1 align="center"><b><font size="12">
+<h1 align="center"><b><font size="18">
     <a href="https://klhrd.github.io/ah-roll-rah/">
         AH-ROLL-RAH
     </a>
@@ -63,3 +63,11 @@ An action-packed 3D ball-rolling platformer where you steer a high-speed ball th
 
 ```
 
+## Getting Started
+
+You can run this project in two ways:
+
+1. Direct Link
+    - [Github Page](https://klhrd.github.io/ah-roll-rah/)
+2. Run Locally
+    -  Clone or download the repository, then host it using a local development server (like VS Code's Live Server) to run it locally via ES6 modules.
